@@ -2,6 +2,7 @@
 import scrapy
 from scrapy.http import Request
 import urlparse
+from decimal import Decimal
 from w3lib.url import url_query_cleaner
 
 from raleads.items import Product
@@ -23,6 +24,13 @@ class WalmartSpider(scrapy.Spider):
             p = Product()
             p['url'] = clean_url
             p['title'] = response.xpath("//h1[@itemprop='name']/span/text()").extract()[0].strip()
+            price_data = response.xpath("//div[@itemprop='price']//text()").extract()
+
+            if price_data:
+                p['price'] = Decimal("".join(price_data[2:7]))
+            else:
+                p['price'] = Decimal("0")
+
             yield p
 
         # Check all of the links on the current page

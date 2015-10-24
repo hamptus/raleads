@@ -11,3 +11,4 @@ import scrapy
 class Product(scrapy.Item):
     title = scrapy.Field()
     url = scrapy.Field()
+    price = scrapy.Field()
